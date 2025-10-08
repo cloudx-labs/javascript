@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Usage Guide | EY Code Style Guide</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <h1><a href="/">EY Code Style Guide</a></h1>
+            <nav>
+                
+                <a href="/js/">JavaScript</a>
+                
+                <a href="/react/">React</a>
+                
+                <a href="/fp/">Functional Programming</a>
+                
+                <a href="/lib/">Library Usage</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="wrapper">
+            <h1 id="ey-library-usage-guide">EY Library Usage Guide</h1>
+
+<p><em>Libraries to use in EY projects and how to use them.</em></p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#icons">Icons</a></li>
+  <li><a href="#styles">Styles</a></li>
+</ol>
+
+<h2 id="icons">Icons</h2>
+
+<p><a name="icons"></a></p>
+<ul>
+  <li><strong>Icons</strong>: use <a href="https://react.fluentui.dev/?path=/docs/icons-catalog--docs">Fluent UI System Icons</a>.
+    <blockquote>
+      <p>Not use other icon libraries like FontAwesome or Material Icons or @fluentui/react-icons-mdl2.</p>
+    </blockquote>
+  </li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Icon</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@fluentui/react-icons</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">ExampleIcon</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">&lt;</span><span class="nc">Icon</span> <span class="p">/&gt;</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="styles">Styles</h2>
+
+<p><a name="styles"></a></p>
+<ul>
+  <li><strong>Styles</strong>: use <a href="https://react.fluentui.dev/">Fluent UI System</a> for styling components.
+    <blockquote>
+      <ul>
+        <li>Not use other libraries like ant-design.</li>
+        <li>Consider creating another file for styles if the component is big.</li>
+      </ul>
+    </blockquote>
+  </li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">makeStyles</span><span class="p">,</span> <span class="nx">mergeClasses</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@fluentui/react-components</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">useClasses</span> <span class="o">=</span> <span class="nx">makeStyles</span><span class="p">({</span>
+    <span class="na">root</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">width</span><span class="p">:</span> <span class="dl">"</span><span class="s2">100%</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">ExampleComponent</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">classes</span> <span class="o">=</span> <span class="nx">useClasses</span><span class="p">();</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">className</span><span class="p">=</span><span class="si">{</span><span class="nx">mergeClasses</span><span class="p">(</span><span class="nx">classes</span><span class="p">.</span><span class="nx">root</span><span class="p">,</span> <span class="dl">"</span><span class="s2">generic-class</span><span class="dl">"</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+            Example
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrapper">
+            <p>&copy; 2025 EY. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

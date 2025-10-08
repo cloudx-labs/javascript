@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Style Guide | EY Code Style Guide</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <h1><a href="/">EY Code Style Guide</a></h1>
+            <nav>
+                
+                <a href="/js/">JavaScript</a>
+                
+                <a href="/react/">React</a>
+                
+                <a href="/fp/">Functional Programming</a>
+                
+                <a href="/lib/">Library Usage</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="wrapper">
+            <h1 id="ey-react-style-guide-">EY React Style Guide() {</h1>
+
+<p><em>A mostly reasonable approach to React</em></p>
+
+<blockquote>
+  <p><strong>Note</strong>: this guide is based on Airbnb guide <a href="https://github.com/airbnb/javascript/tree/master/react">Airbnb React Style Guide</a>,
+it reinforces the most important rules and revises some of them.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#methods">Methods</a></li>
+  <li><a href="#hooks">Hooks</a>
+    <ul>
+      <li>useMemo</li>
+      <li>useCallback</li>
+      <li>useEffect</li>
+    </ul>
+  </li>
+  <li><a href="#naming-conventions">Naming Conventions</a>
+    <ul>
+      <li>Component naming</li>
+      <li>File naming</li>
+      <li>Const and variable naming</li>
+    </ul>
+  </li>
+  <li><a href="#components">Components</a>
+    <ul>
+      <li>Component structure</li>
+      <li>Props</li>
+      <li>Imports</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="methods">Methods</h2>
+
+<p><a name="method--placement"></a></p>
+<ul>
+  <li><strong>Method placement</strong>: if the method doesn’t use <code class="language-plaintext highlighter-rouge">this</code>, it can be a global function at the compilation unit.</li>
+</ul>
+
+<p><a name="method--purefunction"></a></p>
+<ul>
+  <li><strong>Method declaration in pure functions</strong>: method declarations should be outside pure functions.</li>
+</ul>
+
+<blockquote>
+  <p>Why? Methods are created in every execution of the render.</p>
+</blockquote>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">findState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">find</span><span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">_id</span> <span class="o">==</span> <span class="nx">user</span><span class="p">.</span><span class="nx">state</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="si">{</span><span class="nx">findState</span><span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">).</span><span class="nx">name</span><span class="si">}</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">findState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">find</span><span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">_id</span> <span class="o">==</span> <span class="nx">user</span><span class="p">.</span><span class="nx">state</span><span class="p">);</span>
+
+<span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="si">{</span><span class="nx">findState</span><span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">).</span><span class="nx">name</span><span class="si">}</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">);</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">findState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">states</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">_id</span> <span class="o">==</span> <span class="nx">user</span><span class="p">.</span><span class="nx">state</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><a name="method--props"></a></p>
+<ul>
+  <li><strong>Methods and props naming</strong>: handlers of a component should be called <code class="language-plaintext highlighter-rouge">handler</code>+<code class="language-plaintext highlighter-rouge">event</code>.</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">handleSubmit</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">handleChange</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><a name="method--child"></a></p>
+<ul>
+  <li><strong>Child methods naming</strong>: handlers got from props should be named <code class="language-plaintext highlighter-rouge">on</code>+<code class="language-plaintext highlighter-rouge">event</code>.</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">submit</span><span class="p">,</span> <span class="nx">setChange</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">}</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">onChange</span><span class="p">,</span> <span class="nx">onSubmit</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="hooks">Hooks</h2>
+
+<p><a name="use--memo"></a></p>
+<ul>
+  <li><strong>useMemo</strong>: use useMemo always when the result is used in the render.</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">states</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">_id</span> <span class="o">==</span> <span class="nx">user</span><span class="p">.</span><span class="nx">state</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="si">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">useMemo</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">states</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">state</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">_id</span> <span class="o">==</span> <span class="nx">user</span><span class="p">.</span><span class="nx">state</span><span class="p">),</span> <span class="p">[</span><span class="nx">states</span><span class="p">,</span> <span class="nx">user</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="si">{</span><span class="nx">state</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<p><a name="use--callback"></a></p>
+<ul>
+  <li><strong>useCallback</strong>: use useCallback always when the function is passed to a child component</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">onChange</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">handleChange</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">onChange</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">onChange</span><span class="p">=</span><span class="si">{</span><span class="nx">handleChange</span><span class="si">}</span> <span class="p">/&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">onChange</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">handleChange</span> <span class="o">=</span> <span class="nx">useCallback</span><span class="p">((</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">onChange</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">),</span> <span class="p">[</span><span class="nx">onChange</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">onChange</span><span class="p">=</span><span class="si">{</span><span class="nx">handleChange</span><span class="si">}</span> <span class="p">/&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<p><a name="use--effect"></a></p>
+<ul>
+  <li><strong>useEffect</strong>: if the effect is used to fetch data, it should be in a custom hook if not put just before the return.</li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">userId</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">[</span><span class="nx">user</span><span class="p">,</span> <span class="nx">setUser</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+    <span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">fetchUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">setUser</span><span class="p">(</span><span class="nx">user</span><span class="p">));</span>
+    <span class="p">},</span> <span class="p">[</span><span class="nx">userId</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">userId</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">useUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">location</span> <span class="o">=</span> <span class="nx">useLocation</span><span class="p">();</span>
+    <span class="nx">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="c1">//...</span>
+    <span class="p">},</span> <span class="p">[</span><span class="nx">location</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="si">{</span><span class="nx">location</span><span class="p">.</span><span class="nx">pathname</span><span class="si">}</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="naming-conventions">Naming Conventions</h2>
+
+<p><a name="naming--conventions"></a></p>
+<ul>
+  <li><strong>Component naming</strong>: component files should be named with PascalCase and the component inside the file should be named the same.
+    <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="c1">// userdetails.jsx</span>
+<span class="kd">const</span> <span class="nx">userdetails</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">};</span>
+<span class="c1">// good</span>
+<span class="c1">// UserDetails.jsx</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>File naming</strong>: files should be named with camelCase. Only the component files should be named with PascalCase.
+```js
+// bad
+// user_details.tsx
+// user-details.ts
+// userDetails.tsx
+// UserDetails.ts</li>
+</ul>
+
+<p>// good
+// UserDetails.tsx
+// userDetails.ts</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+```js
+// bad
+// user_list.jsx
+const UserList = () =&gt; {
+   const users = [];
+   //...    
+}
+
+// good
+// UserList.jsx
+const UserList = () =&gt; {
+    const users = [];
+    //...    
+}
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Const and variable naming</strong>: use camelCase for variables and UPPER_SNAKE_CASE for constants.
+```js
+// bad
+const maxSize = 10;
+const pi_value = 3.14;</li>
+</ul>
+
+<p>// good
+const MAX_SIZE = 10;
+const PI_VALUE = 3.14;</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+**[⬆ back to top](#table-of-contents)**
+
+## Naming Conventions
+
+&lt;a name="components--structure"&gt;&lt;/a&gt;
+- **Component structure**: component structure should be as follows:
+
+```jsx
+// bad
+const UserDetails = ({user}) =&gt; {
+    const [state, setState] = useState(null);
+    useEffect(() =&gt; {
+        //...
+    }, []);
+   const handleChange = (e) =&gt; {
+      //...
+   };
+    const renderUser = () =&gt; (
+        &lt;div&gt;{user.name}&lt;/div&gt;
+    );
+    return (
+        &lt;div&gt;
+            {renderUser()}
+            &lt;input onChange={handleChange} /&gt;
+        &lt;/div&gt;
+    );
+};
+
+// good
+const UserDetails = ({user}) =&gt; {
+    const [state, setState] = useState(null);
+    const handleChange = (e) =&gt; setState(e.target.value);
+
+    useEffect(() =&gt; {
+        //...
+    }, []);
+
+    return (
+        &lt;div&gt;
+            &lt;div&gt;{user.name}&lt;/div&gt;
+            &lt;input onChange={handleChange} /&gt;
+        &lt;/div&gt;
+    );
+};
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Props</strong>: props should be destructured in the function signature.
+    <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">{</span><span class="nx">user</span><span class="p">,</span> <span class="nx">onChange</span><span class="p">}</span> <span class="o">=</span> <span class="nx">props</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">input</span> <span class="na">onChange</span><span class="p">=</span><span class="si">{</span><span class="nx">onChange</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">UserDetails</span> <span class="o">=</span> <span class="p">({</span><span class="nx">user</span><span class="p">,</span> <span class="nx">onChange</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">onChange</span><span class="p">=</span><span class="si">{</span><span class="nx">onChange</span><span class="si">}</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<ul>
+  <li><strong>Imports</strong>: Import organization and best practices for React components.</li>
+</ul>
+
+<p><a name="imports--specific"></a></p>
+<ul>
+  <li><strong>Specific imports</strong>: avoid importing everything to reduce bundle size. Import only what you need.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">utils</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../utils</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">FC</span><span class="p">,</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">useEffect</span><span class="p">,</span> <span class="nx">useMemo</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">formatDate</span><span class="p">,</span> <span class="nx">validateEmail</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../utils</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><a name="imports--order"></a></p>
+<ul>
+  <li><strong>Import order</strong>: organize imports in the following order with blank lines between groups:</li>
+</ul>
+
+<ol>
+  <li>External libraries (React, third-party packages)</li>
+  <li>Internal modules (components, hooks, utils)</li>
+  <li>Relative imports (same directory, parent directories)</li>
+  <li>Type imports (if using TypeScript)</li>
+</ol>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">useEffect</span><span class="p">,</span> <span class="nx">useCallback</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Router</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react-router-dom</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">styled</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@mui/material/styles</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../components/Button</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">useAuth</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../hooks/useAuth</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">api</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../services/api</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="dl">'</span><span class="s1">./Component.css</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">validateForm</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./utils</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="nx">type</span> <span class="p">{</span> <span class="nx">User</span><span class="p">,</span> <span class="nx">UserProps</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../types</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><a name="imports--default"></a></p>
+<ul>
+  <li><strong>Default vs named imports</strong>: prefer named imports for better tree-shaking and explicit dependencies.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">utils</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../utils</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="c1">// good</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">FC</span><span class="p">,</span> <span class="nx">ReactNode</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">formatDate</span><span class="p">,</span> <span class="nx">validateEmail</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../utils</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><a name="imports--dynamic"></a></p>
+<ul>
+  <li><strong>Dynamic imports</strong>: use dynamic imports for code splitting when appropriate.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good - for large components or libraries</span>
+<span class="kd">const</span> <span class="nx">LazyChart</span> <span class="o">=</span> <span class="nx">lazy</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="dl">'</span><span class="s1">../components/Chart</span><span class="dl">'</span><span class="p">));</span>
+<span class="kd">const</span> <span class="nx">LazyModal</span> <span class="o">=</span> <span class="nx">lazy</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="dl">'</span><span class="s1">../components/Modal</span><span class="dl">'</span><span class="p">));</span>
+
+<span class="c1">// good - for conditional imports</span>
+<span class="kd">const</span> <span class="nx">loadAnalytics</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">production</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">analytics</span> <span class="p">}</span> <span class="o">=</span> <span class="k">await</span> <span class="k">import</span><span class="p">(</span><span class="dl">'</span><span class="s1">../services/analytics</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">analytics</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><a name="imports--aliases"></a></p>
+<ul>
+  <li><strong>Import aliases</strong>: use clear and consistent aliases when needed.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="k">as</span> <span class="nx">B</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../components/Button</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Utils</span> <span class="k">as</span> <span class="nx">U</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../utils</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="c1">// good</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="k">as</span> <span class="nx">PrimaryButton</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../components/Button</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">DateUtils</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../utils</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><a name="imports--types"></a></p>
+<ul>
+  <li><strong>Type imports</strong>: separate type imports from value imports (TypeScript).</li>
+</ul>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">FC</span><span class="p">,</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">User</span><span class="p">,</span> <span class="nx">UserProps</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="c1">// good</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">FC</span><span class="p">,</span> <span class="nx">useState</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="kd">type</span> <span class="p">{</span> <span class="nx">User</span><span class="p">,</span> <span class="nx">UserProps</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">../types</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrapper">
+            <p>&copy; 2025 EY. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

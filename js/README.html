@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Style Guide | EY Code Style Guide</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <h1><a href="/">EY Code Style Guide</a></h1>
+            <nav>
+                
+                <a href="/js/">JavaScript</a>
+                
+                <a href="/react/">React</a>
+                
+                <a href="/fp/">Functional Programming</a>
+                
+                <a href="/lib/">Library Usage</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="wrapper">
+            <h1 id="ey-javascript-code-style-guide-">EY JavaScript Code Style Guide {</h1>
+
+<p><em>A mostly reasonable approach to JavaScript</em></p>
+
+<blockquote>
+  <p><strong>Note</strong>: this guide is based on the Airbnb guide <a href="https://github.com/airbnb/javascript/blob/master/README.md">Airbnb JavaScript Style Guide</a>,
+it reinforces the most important rules and revises some of them.</p>
+</blockquote>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#naming">Naming</a></li>
+  <li><a href="#brace">Brace</a></li>
+  <li><a href="#concise-block">Concise Block</a></li>
+  <li><a href="#type-function">Type Function</a></li>
+  <li><a href="#es7">ES7</a></li>
+  <li><a href="#template-string">Template String</a></li>
+</ol>
+
+<h2 id="naming">Naming</h2>
+
+<p><a name="naming"></a></p>
+<ul>
+  <li><strong>Methods and Functions</strong>: Both should be named with a verb in infinitive + noun.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">validating</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">calculatedAge</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">};</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">validate</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="brace">Brace</h2>
+
+<p><a name="brace"></a></p>
+<ul>
+  <li>Use braces with all single-line blocks.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+
+<span class="c1">// good</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="concise-block">Concise block</h2>
+
+<blockquote>
+  <p>Consider side-effects when using concise body syntax.</p>
+</blockquote>
+
+<p><a name="concise-block"></a></p>
+<ul>
+  <li>Use <strong>concise body</strong> syntax instead of using a body block for single-expression functions.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">bar</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">foo</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="type-function">Type function</h2>
+
+<p><a name="type-function"></a></p>
+<ul>
+  <li>Use arrow functions for callbacks and function expressions (when you don’t need to bind <code class="language-plaintext highlighter-rouge">this</code>).</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">foo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">bar</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="es7">ES7</h2>
+<p><a name="es7"></a></p>
+<ul>
+  <li><strong>Async/Await</strong>: use <code class="language-plaintext highlighter-rouge">async/await</code> instead of <code class="language-plaintext highlighter-rouge">then</code> (promises)</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">fetchUser</span> <span class="o">=</span> <span class="nx">url</span> <span class="o">=&gt;</span> <span class="nx">getAuthHeader</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span>
+    <span class="nx">authorization</span> <span class="o">=&gt;</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span> <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="nx">authorization</span> <span class="p">}</span> <span class="p">})</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span>
+    <span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>
+<span class="p">).</span><span class="nx">then</span><span class="p">(</span>
+    <span class="nx">data</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span>
+<span class="p">).</span><span class="k">catch</span><span class="p">(</span>
+    <span class="nx">err</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">fetchUser</span> <span class="o">=</span> <span class="k">async</span> <span class="nx">url</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+            <span class="na">credentials</span><span class="p">:</span> <span class="dl">'</span><span class="s1">same-origin</span><span class="dl">'</span><span class="p">,</span>
+            <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">authorization</span><span class="p">:</span> <span class="k">await</span> <span class="nx">getAuthHeader</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+        <span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">user</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="template-string">Template String</h2>
+<p><a name="template-string"></a></p>
+<ul>
+  <li>Use template strings instead of string concatenation.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">greeting</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Hello </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, how are you?</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">greeting</span> <span class="o">=</span> <span class="s2">`Hello </span><span class="p">${</span><span class="nx">name</span><span class="p">}</span><span class="s2">, how are you?`</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h1>}</h1>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrapper">
+            <p>&copy; 2025 EY. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

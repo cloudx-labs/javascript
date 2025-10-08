@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functional Programming Guide | EY Code Style Guide</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrapper">
+            <h1><a href="/">EY Code Style Guide</a></h1>
+            <nav>
+                
+                <a href="/js/">JavaScript</a>
+                
+                <a href="/react/">React</a>
+                
+                <a href="/fp/">Functional Programming</a>
+                
+                <a href="/lib/">Library Usage</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="wrapper">
+            <h1 id="ey-functional-programming-guide-">EY Functional Programming Guide() {</h1>
+
+<p><em>A mostly reasonable approach to functional programing</em></p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#map">Map</a></li>
+  <li><a href="#filtering">Filtering</a></li>
+  <li><a href="#immutability">Immutability</a></li>
+  <li><a href="#functional-if">Functional IF</a></li>
+  <li><a href="#functional-for">Functional FOR</a></li>
+  <li><a href="#no-set-map">No Set/Map</a></li>
+  <li><a href="#no-mutation">No Mutation</a></li>
+  <li><a href="#pure-functions">Pure Functions</a></li>
+</ol>
+
+<h2 id="map">Map</h2>
+
+<p><a name="map"></a></p>
+<ul>
+  <li><strong>Map Usage</strong>: Map should only be used when a transformation of the data is intended.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="nx">users</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">user</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">user</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// good</span>
+<span class="nx">users</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">user</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">user</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// best</span>
+<span class="kd">const</span> <span class="nx">newUsers</span> <span class="o">=</span> <span class="nx">map</span><span class="p">(</span><span class="nx">users</span><span class="p">,</span> <span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({...</span><span class="nx">user</span><span class="p">,</span> <span class="na">order</span><span class="p">:</span> <span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}));</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="filtering">Filtering</h2>
+
+<p><a name="filtering"></a></p>
+<ul>
+  <li><strong>Filtering</strong>: Do not use <code class="language-plaintext highlighter-rouge">Array#splice</code> instead <code class="language-plaintext highlighter-rouge">filter</code> o <code class="language-plaintext highlighter-rouge">reject</code> should be used.</li>
+</ul>
+
+<blockquote>
+  <p>Why? Splice mutates the original array.</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">let</span> <span class="nx">arr1</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">d</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">e</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="c1">// array mutates into ['c', 'd', 'e']</span>
+<span class="c1">// result = ['a', 'b']</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">arr1</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">d</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">e</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">arr1</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">a</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">e</span><span class="dl">'</span><span class="p">);</span>
+<span class="c1">// result = ['a', 'b', 'c', 'd']</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="immutability">Immutability</h2>
+
+<p><a name="immutability--methods"></a></p>
+<ul>
+  <li><strong>Immutable Methods</strong>: Methods that do not mutate the arguments are preferred.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad (mutates original array)</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">value</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// good (does not mutate original array)</span>
+<span class="kd">const</span> <span class="nx">newArr</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span> <span class="o">!==</span> <span class="nx">value</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="functional-if">Functional IF</h2>
+
+<p><a name="functional-if"></a></p>
+<ul>
+  <li><strong>Functional <code class="language-plaintext highlighter-rouge">if</code></strong>: Functional replacement for <code class="language-plaintext highlighter-rouge">IF</code> statement.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// imperative</span>
+<span class="kd">const</span> <span class="nx">formatUserName</span> <span class="o">=</span> <span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">disabled</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="dl">'</span><span class="s1"> [disabled]</span><span class="dl">'</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// functional</span>
+<span class="kd">const</span> <span class="nx">formatUserName</span> <span class="o">=</span> <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">disabled</span> <span class="p">?</span> <span class="s2">`</span><span class="p">${</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="s2"> + [disabled]`</span> <span class="p">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="functional-for">Functional FOR</h2>
+
+<p><a name="functional-for"></a></p>
+<ul>
+  <li><strong>Functional <code class="language-plaintext highlighter-rouge">for</code></strong>: Functional replacement for <code class="language-plaintext highlighter-rouge">FOR</code> statement</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">John</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">84</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Mark</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">34</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Michael</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">4</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">James</span><span class="dl">'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">6</span> <span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// imperative</span>
+<span class="kd">const</span> <span class="nx">underAge</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">users</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">users</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">underAge</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">users</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// functional</span>
+<span class="kd">const</span> <span class="nx">isUnderAge</span> <span class="o">=</span> <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">getName</span> <span class="o">=</span> <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">getUnderAge</span> <span class="o">=</span> <span class="nx">users</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">isUnderAge</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">getName</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">underAge</span> <span class="o">=</span> <span class="nx">getUnderAge</span><span class="p">(</span><span class="nx">users</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="no-setmap">No Set/Map</h2>
+
+<p><a name="no-set-map"></a></p>
+<ul>
+  <li><strong>No Use of <code class="language-plaintext highlighter-rouge">Set</code> or <code class="language-plaintext highlighter-rouge">Map</code></strong>: Avoid using <code class="language-plaintext highlighter-rouge">new Set</code> or <code class="language-plaintext highlighter-rouge">new Map</code> for basic array/object operations.</li>
+</ul>
+
+<blockquote>
+  <p>Why? Using native array and object methods (<code class="language-plaintext highlighter-rouge">filter</code>, <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">reduce</code>, etc.) keeps code simple, readable, and consistent. <code class="language-plaintext highlighter-rouge">Set</code> and <code class="language-plaintext highlighter-rouge">Map</code> introduce additional complexity and are not always necessary for typical data manipulation tasks.</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">unique</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">unique</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">filter</span><span class="p">((</span><span class="nx">item</span><span class="p">,</span> <span class="nx">idx</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">===</span> <span class="nx">idx</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="no-mutation">No Mutation</h2>
+
+<p><a name="no-mutation"></a></p>
+<blockquote>
+  <p>Why? Mutation breaks referential transparency and makes code harder to reason about.</p>
+</blockquote>
+
+<ul>
+  <li><strong>No Mutation</strong>: Avoid mutating arguments or external state inside functions.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">const</span> <span class="nx">addItem</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">addItem</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">[...</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">item</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2 id="pure-functions">Pure Functions</h2>
+
+<p><a name="pure-functions"></a></p>
+<blockquote>
+  <p>Why? Mutation breaks referential transparency and makes code harder to reason about.</p>
+</blockquote>
+
+<ul>
+  <li><strong>Pure Functions</strong>: Prefer pure functions that always return the same output for the same input and have no side effects.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">let</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">increment</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">counter</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">counter</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// good</span>
+<span class="kd">const</span> <span class="nx">increment</span> <span class="o">=</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h1>}</h1>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrapper">
+            <p>&copy; 2025 EY. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
