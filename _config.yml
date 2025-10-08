@@ -1,8 +1,8 @@
 # Site settings
 title: EY Code Style Guide
 description: A mostly reasonable approach to general code style
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site
+baseurl: "/javascript"
+url: "https://cloudx-labs.github.io"
 
 # Build settings
 markdown: kramdown
@@ -27,14 +27,14 @@ exclude:
 # Navigation
 navigation:
   - title: JavaScript
-    url: /js/
+    url: /javascript/js/
   - title: React
-    url: /react/
+    url: /javascript/react/
   - title: Functional Programming
-    url: /fp/
+    url: /javascript/fp/
   - title: Library Usage
-    url: /lib/
+    url: /javascript/lib/
 
 # GitHub Pages settings
 github:
-  repository_nwo: # tu-usuario/tu-repositorio
+  repository_nwo: cloudx-labs/javascript
