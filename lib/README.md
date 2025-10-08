@@ -1,6 +1,11 @@
-# EYX Library Usage Guide() {
+---
+layout: default
+title: Library Usage Guide
+---
 
-*Libraries to use in EYX projects and how to use them.*
+# EY Library Usage Guide
+
+*Libraries to use in EY projects and how to use them.*
 
 ## Table of Contents
 
@@ -48,5 +53,3 @@ const ExampleComponent = () => {
 ```
 
 **[⬆ back to top](#table-of-contents)**
-
-# }

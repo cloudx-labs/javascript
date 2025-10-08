@@ -1,3 +1,8 @@
+---
+layout: default
+title: Functional Programming Guide
+---
+
 # EY Functional Programming Guide() {
 
 *A mostly reasonable approach to functional programing*

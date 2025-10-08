@@ -1,0 +1,40 @@
+# Site settings
+title: EY Code Style Guide
+description: A mostly reasonable approach to general code style
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Navigation
+navigation:
+  - title: JavaScript
+    url: /js/
+  - title: React
+    url: /react/
+  - title: Functional Programming
+    url: /fp/
+  - title: Library Usage
+    url: /lib/
+
+# GitHub Pages settings
+github:
+  repository_nwo: # tu-usuario/tu-repositorio

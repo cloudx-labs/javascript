@@ -1,3 +1,8 @@
+---
+layout: default
+title: JavaScript Style Guide
+---
+
 # EY JavaScript Code Style Guide {
 
 *A mostly reasonable approach to JavaScript*

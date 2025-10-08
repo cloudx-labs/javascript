@@ -1,3 +1,8 @@
+---
+layout: default
+title: React Style Guide
+---
+
 # EY React Style Guide() {
 
 *A mostly reasonable approach to React*
