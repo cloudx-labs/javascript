@@ -4,6 +4,9 @@ description: A mostly reasonable approach to general code style
 baseurl: "/javascript"
 url: "https://cloudx-labs.github.io"
 
+# Repository settings
+repository: cloudx-labs/javascript
+
 # Build settings
 markdown: kramdown
 highlighter: rouge
