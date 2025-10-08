@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>/fp/README.html</loc>
+<loc>https://cloudx-labs.github.io/javascript/fp/README.html</loc>
 </url>
 <url>
-<loc>/react/README.html</loc>
+<loc>https://cloudx-labs.github.io/javascript/react/README.html</loc>
 </url>
 <url>
-<loc>/lib/README.html</loc>
+<loc>https://cloudx-labs.github.io/javascript/lib/README.html</loc>
 </url>
 <url>
-<loc>/js/README.html</loc>
+<loc>https://cloudx-labs.github.io/javascript/js/README.html</loc>
 </url>
 <url>
-<loc>/README.html</loc>
+<loc>https://cloudx-labs.github.io/javascript/README.html</loc>
 </url>
 </urlset>
